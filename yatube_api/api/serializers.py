@@ -42,8 +42,8 @@ class FollowSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        fields = '__all__'
-        read_only_fields = ('id', 'user', )
+        fields = ('user', 'following')
+        read_only_fields = ('user', )
 
         model = Follow
         validators = (
