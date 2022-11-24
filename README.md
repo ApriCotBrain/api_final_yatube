@@ -64,12 +64,99 @@ python3 manage.py migrate
 python3 manage.py runserver
 ```
 
-Примеры для запросов API:
+### Документация:
+После запуска на localhost доступна [документация](http://127.0.0.1:8000/redoc/).
+
+## Примеры:
+### Получение токена:
+POST: http://127.0.0.1:8000/api/v1/jwt/create/
+```
+{
+    "username": "string",
+    "password": "string"
+}
+```
+RESPONSE:
+```
+{
+    "refresh": "string",
+    "access": "string"
+}
+```
+Для добавления/изменения данных через API необходимо добавить в header к запросу параметр <br>
+'Authorization' со значением 'Bearer ACCESS_TOKEN'.
+
+### Получение постов (с офсетом и ограничением по количеству):
+##### GET: http://127.0.0.1:8000/api/v1/posts/?offset=300&limit=100 
+##### RESPONSE:
+```
+{
+  "count": 123,
+  "next": "http://api.example.org/accounts/?offset=400&limit=100",
+  "previous": "http://api.example.org/accounts/?offset=200&limit=100",
+  "results": [
+    {
+      "id": 0,
+      "author": "string",
+      "text": "string",
+      "pub_date": "2022-11-24T20:41:29.648Z",
+      "image": "string",
+      "group": 0
+    }
+  ]
+}
+ ```
+
+##### RESPONSE (при запросе без параметров offset и limit):
+```
+
+[
+    {
+        "id": 1,
+        "author": "alex",
+        "text": "alex post",
+        "pub_date": "2022-11-24T12:19:43.288654Z",
+        "image": null,
+        "group": null
+    }
+]
+```
+### Создание поста:
+POST:  http://127.0.0.1:8000/api/v1/posts/
 
 ```
-GET  api/v1/posts/
-POST api/v1/posts/
-GET api/v1/posts/{id}/
-PUT api/v1/posts/{id}/
-PATCH api/v1/posts/{id}/
+{
+  "text": "string",
+  "image": "string", 
+  "group": 0
+}
+
+```
+RESPONSE:
+```
+{
+  "id": 0,
+  "author": "string",`
+  "text": "string",
+  "pub_date": "2022-11-24T14:15:22Z",
+  "image": "string",
+  "group": 0
+}
+```
+### Подписаться на автора (только для авторизованных пользователей):
+
+POST:  http://127.0.0.1:8000/api/v1/follow/
+
+```
+{
+  "following": "string_username"
+}
+```
+
+##### RESPONSE:
+```
+{
+  "user": "string",
+  "following": "string"
+}
 ```
